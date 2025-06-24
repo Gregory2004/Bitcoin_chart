@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/Georgiy/Desktop/Bitcoin-prices/frontend/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
