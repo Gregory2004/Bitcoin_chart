@@ -2,6 +2,6 @@ const express = require('express')
 const router = express.Router()
 const controller = require('../controllers/dateController')
 
-router.get('/data',controller.getData)
+router.post('/data',controller.getData)
  
 module.exports = router

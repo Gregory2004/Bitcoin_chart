@@ -1,21 +1,35 @@
-// const bitcoinService = require('../service/bitcoinPrice')
+const bitcoinService = require('../service/bitcoinPrice');
 
 async function getData(req, res) {
   try {
-    console.log('Query:', req.query);
+    const { start, end, period } = req.query;
 
-    if ('start' in req.query && !req.query.start) {
-      return res.status(400).json({ error: 'Введите дату' });
+    if(period == 'custom' && (!start || !end)){
+
+       return res.status(404).json({error:'Введите данные'})
+    }
+    console.log(period)
+    let data;
+    if (period === 'custom') {
+      data = await bitcoinService.getCandlesAndSave({
+        period: 'custom',
+        start,
+        end
+      });
+    } else {
+      data = await bitcoinService.getCandlesAndSave({ period });
     }
 
-    // Пример ответа — верни хоть что-то, чтобы не "висел"
-    res.json({ message: 'Данные успешно получены' });
+    if (data.error) {
+      return res.status(404).json({ error: data.error });
+    }
+
+    return res.json({ data });
 
   } catch (error) {
     console.error('Ошибка сервера:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
   }
 }
 
-
-module.exports = { getData }
+module.exports = { getData };

@@ -5,7 +5,7 @@ const Router = require('./routes/dateRoutes')
 const PORT = 4000;
 
 app.use(cors())
-
+app.use(express.json())
 app.use('/graph',Router)
 
 app.listen(PORT);
