@@ -1,43 +1,63 @@
 <template>
-    <canvas ref="canvasRef"></canvas>
+  <CChart
+    type="line"
+    :data="chartData"
+    :options="chartOptions"
+    class="bg-[#1f1424] w-[70%] rounded-xl p-4"
+  />
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Chart, registerables } from 'chart.js'
-Chart.register(...registerables)
-const canvasRef = ref(null)
+import { ref, watch } from 'vue'
+import { CChart } from '@coreui/vue-chartjs'
 
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'] // вместо Utils.months просто пример
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'BITCOIN PRICE',
-    data: [65, 59, 80, 81, 56, 55, 40],
-    fill: false,
-    borderColor: 'rgb(100, 1, 255)',
-  }]
-}
-
-const config = {
-  type: 'line',
-  data: data,
-  options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: true
-      },
-    },
+const props = defineProps({
+  labels: {
+    type: Array,
+    required: true
+  },
+  prices: {
+    type: Array,
+    required: true
   }
-}
-
-onMounted(() => {
-  if (!canvasRef.value) return
-
-  new Chart(canvasRef.value, config)
 })
+
+const chartData = ref({
+  labels: props.labels,
+  datasets: [
+    {
+      backgroundColor:'white',
+      label: 'BITCOIN PRICE',
+      data: props.prices,
+      borderColor: 'rgb(100, 1, 255)',
+      fill: false
+    }
+  ]
+})
+
+const chartOptions = ref({
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+    tooltip: { enabled: true }
+  }
+})
+
+
+watch(
+  () => [props.labels, props.prices],
+  ([newLabels, newPrices]) => {
+    chartData.value = {
+      labels: newLabels,
+      datasets: [
+        {
+          label: 'BITCOIN PRICE',
+          data: newPrices,
+          borderColor: 'rgb(100, 1, 255)',
+          fill: false
+        }
+      ]
+    }
+  }
+)
 </script>

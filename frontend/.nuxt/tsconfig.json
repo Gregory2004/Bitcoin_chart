@@ -156,6 +156,7 @@
     "../dist",
     "../.data",
     "../node_modules",
+    "../../node_modules",
     "../node_modules/nuxt/node_modules",
     "../node_modules/@nuxt/telemetry/node_modules",
     "../node_modules/@nuxt/telemetry/runtime/server",
